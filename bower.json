@@ -1,0 +1,23 @@
+{
+  "name": "named-kernel-manager",
+  "description": "module named-kernel-manager",
+  "dependencies": {
+  },
+  "main": ["./dist/named-kernel-manager.js"],
+  "ignore": [
+    "**/.sw?",
+    "**/.*.sw?",
+    "bower_components",
+    "node_modules",
+    "npm-debug.log",
+    "/coverage",
+    "/doc",
+    "/.*",
+    "appveyor.yml",
+    "gulpfile.babel.js",
+    "karma.conf.js",
+    "webpack.config.js",
+    "esdoc.json"
+  ],
+  "license": "MIT"
+}
