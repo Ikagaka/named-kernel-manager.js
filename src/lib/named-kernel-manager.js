@@ -23,39 +23,23 @@ export const NamedKernelManagerControllers = {};
 export class NamedKernelManager extends RoutableComponent {
   /**
    * constructor
-   * @param {Object} event_source - Event source
-   * @param {NanikaStorage} event_source.storage - storage
-   * @param {NamedManager} event_source.named_manager - named manager
-   * @param {TimerEventSource} event_source.time - Timer event source
+   * @param {Object} components - Event source
+   * @param {NanikaStorage} components.NanikaStorage - storage
+   * @param {NamedManager} components.NamedManager - named manager
+   * @param {TimerEventSource} components.TimerEventSource - Timer event source
    * @param {RoutableComponentRoutes} [routes] - ルーティング
    * @param {Hash<NamedKernelManagerController>} [controllers] - コントローラ
    */
-  constructor(event_source, routes = new RoutableComponentRoutes(NamedKernelManagerRoutings), controllers = NamedKernelManagerControllers) {
-    const {storage, named_manager, time} = event_source;
-    super();
+  constructor(components, routes = new RoutableComponentRoutes(NamedKernelManagerRoutings), controllers = NamedKernelManagerControllers) {
+    super(components);
+    this.components.NamedKernelManager = this;
 
     /** @type {NamedKernel[]} */
     this._named_kernels = {};
-    this._named_id_by_kernels = {};
-
-    this._storage = storage;
-    this._named_manager = named_manager;
 
     this._routes = routes;
     this.routes.setup_to(this, controllers);
   }
-
-  /**
-   * Storage
-   * @type {NanikaStorage}
-   */
-  get storage() { return this._storage; }
-
-  /**
-   * Named Manager
-   * @type {NamedManager}
-   */
-  get named_manager() { return this._named_manager; }
 
   /**
    * Kernel event routes

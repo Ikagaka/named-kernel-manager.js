@@ -1,5 +1,6 @@
 import {Shiorif} from 'shiorif';
 import {SakuraScriptExecuter} from 'sakurascript';
+import {NamedKernelManager} from './named-kernel-manager';
 
 export class NamedKernelManagerGhostModule {
   /**
