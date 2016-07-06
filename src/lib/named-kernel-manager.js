@@ -2,11 +2,6 @@ import mixin from './mixin';
 import {RoutableComponent, RoutableComponentRoutes} from 'routable-component';
 import {NamedKernelManagerGhostModule} from './named-kernel-manager-ghost-module';
 
-// shim
-require('core-js/fn/array/iterator');
-require('core-js/fn/symbol');
-require('core-js/fn/reflect');
-
 /**
  * ルーティング設定クラスのリスト
  * @type {RoutableComponentRouting[]}

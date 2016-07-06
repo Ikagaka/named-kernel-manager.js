@@ -35,18 +35,14 @@ export class NamedKernelManagerGhostModule {
    * @param {Hash<GhostKernelController>} [controllers] - コントローラ
    * @return {Promise<GhostKernel>} ghost kernel instance
    */
-  load_ghost(named_id, profile, routes, controllers) {
-    return new Promise(
-      (resolve, reject) => {
-        if (this.is_kernel_exists(named_id)) {
-          return reject(new Error(`ghost [${named_id}] already exists`));
-        }
+  async load_ghost(named_id, profile, routes, controllers) {
+    if (this.is_kernel_exists(named_id)) {
+      throw new Error(`ghost [${named_id}] already exists`);
+    }
 
-        const kernel = this._get_ghost_kernel_as_profile(named_id, profile, routes, controllers);
-        this.register_kernel(named_id, kernel);
-        resolve(kernel);
-      }
-    );
+    const kernel = await this._get_ghost_kernel_as_profile(named_id, profile, routes, controllers);
+    this.register_kernel(named_id, kernel);
+    return kernel;
   }
   // then kernel.start()
 
@@ -55,23 +51,20 @@ export class NamedKernelManagerGhostModule {
    * @param {string} named_id - named id
    * @param {GhostProfile} [profile] - profile
    */
-  _get_ghost_profile(named_id, profile) {
-    return new Promise((resolve, reject) =>
-      resolve(profile || this.storage.ghost_profile(named_id))
-    );
+  async _get_ghost_profile(named_id, profile) {
+    return profile || await this.storage.ghost_profile(named_id);
   }
 
   /**
    * load ghost
    * @param {string} named_id - named id
-   * @param {GhostProfile} [profile] - profile
+   * @param {GhostProfile} [default_profile] - profile
    * @param {RoutableComponentRoutes} [routes] - ルーティング
    * @param {Hash<GhostKernelController>} [controllers] - コントローラ
    */
-  _get_ghost_kernel_as_profile(named_id, profile, routes, controllers) {
-    return this._get_ghost_profile(named_id, profile).then((profile) =>
-      this._get_ghost_kernel(named_id, profile.shell_name, profile.balloon_name, routes, controllers)
-    );
+  async _get_ghost_kernel_as_profile(named_id, default_profile, routes, controllers) {
+    const profile = await this._get_ghost_profile(named_id, default_profile);
+    return await this._get_ghost_kernel(named_id, profile.shell_name, profile.balloon_name, routes, controllers);
   }
 
   /**
@@ -83,7 +76,7 @@ export class NamedKernelManagerGhostModule {
    * @param {Hash<GhostKernelController>} [controllers] - コントローラ
    * @return {Promise<GhostKernel>} ghost kernel instance
    */
-  _get_ghost_kernel(named_id, shellname, balloonname, routes, controllers) {
+  async _get_ghost_kernel(named_id, shellname, balloonname, routes, controllers) {
     return Promise.all([
       this._get_ghost(named_id, storage),
       this._get_shell(named_id, shellname, storage),
@@ -122,15 +115,12 @@ export class NamedKernelManagerGhostModule {
    * @param {string} named_id - named id
    * @return {Promise<Shiori>} ghost(shiori) instance
    */
-  _get_ghost(named_id) {
+  async _get_ghost(named_id) {
     this.emit('ghost_load', named_id);
     const dirpath = NamedKernelManager._get_ghost_directory_path(named_id);
-    return NamedKernelManager._load_ghost(storage.backend.fs, dirpath).then(
-      (ghost) => {
-        this.emit('ghost_loaded', named_id);
-        return ghost;
-      }
-    );
+    const ghost = await NamedKernelManager._load_ghost(storage.backend.fs, dirpath);
+    this.emit('ghost_loaded', named_id);
+    return ghost;
   }
 
   /**
@@ -147,10 +137,9 @@ export class NamedKernelManagerGhostModule {
    * @param {NanikaDirectory} ghost directory contents
    * @return {Promise<Shiori>} ghost(shiori) instance
    */
-  static _load_ghost(fs, dirpath) {
-    return ShioriLoader.detect_shiori(fs, dirpath).then(
-      (shiori) => shiori.load(dirpath)
-    );
+  static async _load_ghost(fs, dirpath) {
+    const shiori = await ShioriLoader.detect_shiori(fs, dirpath);
+    return await shiori.load(dirpath);
   }
 
   /**
@@ -159,21 +148,13 @@ export class NamedKernelManagerGhostModule {
    * @param {string} shellname - shellname
    * @return {Promise<Shell>} shell instance
    */
-  _get_shell(named_id, shellname) {
+  async _get_shell(named_id, shellname) {
     this.emit('load_shell_files', named_id, shellname);
-    return this
-      ._get_shell_directory(named_id, shellname)
-      .then(
-        (directory) => {
-          this.emit('shell_load', named_id, shellname, directory);
-          return NamedKernelManager._load_shell(directory);
-        }
-      ).then(
-        (shell) => {
-          this.emit('shell_loaded', named_id, shellname, shell);
-          return shell;
-        }
-      );
+    const directory = await this._get_shell_directory(named_id, shellname);
+    this.emit('shell_load', named_id, shellname, directory);
+    const shell = await NamedKernelManager._load_shell(directory);
+    this.emit('shell_loaded', named_id, shellname, shell);
+    return shell;
   }
 
   /**
@@ -182,8 +163,8 @@ export class NamedKernelManagerGhostModule {
    * @param {string} shellname - shellname
    * @return {Promise<NanikaDirectory>} shell directory contents
    */
-  _get_shell_directory(named_id, shellname) {
-    return this.storage.shell(named_id, shellname);
+  async _get_shell_directory(named_id, shellname) {
+    return await this.storage.shell(named_id, shellname);
   }
 
   /**
@@ -201,21 +182,13 @@ export class NamedKernelManagerGhostModule {
    * @param {string} balloonname - balloonname
    * @return {Promise<Balloon>} balloon instance
    */
-  _get_balloon(balloonname) {
+  async _get_balloon(balloonname) {
     this.emit('load_balloon_files', balloonname);
-    return this
-      ._get_balloon_directory(balloonname)
-      .then(
-        (directory) => {
-          this.emit('balloon_load', balloonname, directory);
-          return NamedKernelManager._load_balloon(directory);
-        }
-      ).then(
-        (balloon) => {
-          this.emit('balloon_loaded', balloonname, shell);
-          return balloon;
-        }
-      );
+    const directory = await this._get_balloon_directory(balloonname);
+    this.emit('balloon_load', balloonname, directory);
+    const balloon = await NamedKernelManager._load_balloon(directory);
+    this.emit('balloon_loaded', balloonname, shell);
+    return balloon;
   }
 
   /**
@@ -223,8 +196,8 @@ export class NamedKernelManagerGhostModule {
    * @param {string} balloonname - balloonname
    * @return {Promise<NanikaDirectory>} balloon directory contents
    */
-  _get_balloon_directory(balloonname) {
-    return this.storage.balloon(balloonname);
+  async _get_balloon_directory(balloonname) {
+    return await this.storage.balloon(balloonname);
   }
 
   /**
