@@ -233,9 +233,12 @@ export class NamedKernelManagerGhostModule {
         throw new Error(`target is not Blob or URL : ${target.name || target}`); // TODO: typed error
       }
       this.emit('install_nar_loaded', target, nar);
-      const dirpath = typeof from === 'string' || from instanceof String ? from : this.namedId(from);
-      // TODO: fromの他形式対応
-      const sakuraname = nanikaStorage.ghost_descript(dirpath)['sakura.name']
+      let dirpath, sakuraname;
+      if (from) { // from が指定された場合
+        dirpath = typeof from === 'string' || from instanceof String ? from : this.namedId(from);
+        // TODO: fromの他形式対応
+        sakuraname = nanikaStorage.ghost_descript(dirpath)['sakura.name'];
+      }
       const install_results = await nanikaStorage.install_nar(nar, dirpath, sakuraname);
       if (!install_results) {
         this.emit('install_not_accepted', target, nar);

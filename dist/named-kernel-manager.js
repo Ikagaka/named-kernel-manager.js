@@ -4619,10 +4619,14 @@ var namedKernelManager =
 	                // TODO: typed error
 	
 	                this.emit('install_nar_loaded', target, nar);
-	                dirpath = typeof from === 'string' || from instanceof String ? from : this.namedId(from);
-	                // TODO: fromの他形式対応
+	                dirpath = void 0, sakuraname = void 0;
 	
-	                sakuraname = nanikaStorage.ghost_descript(dirpath)['sakura.name'];
+	                if (from) {
+	                  // from が指定された場合
+	                  dirpath = typeof from === 'string' || from instanceof String ? from : this.namedId(from);
+	                  // TODO: fromの他形式対応
+	                  sakuraname = nanikaStorage.ghost_descript(dirpath)['sakura.name'];
+	                }
 	                _context11.next = 22;
 	                return nanikaStorage.install_nar(nar, dirpath, sakuraname);
 	
