@@ -102,7 +102,7 @@ export class NamedKernelManagerGhostModule {
    * @param {string} dirpath - dirpath
    * @return {string} dirpath that ends with path separator
    */
-  static _canondirpath(dirpath) {
+  _canondirpath(dirpath) {
     const path_separator = dirpath.match(/[\\\/]/)[0];
     return dirpath.replace(
       new RegExp('\\' + path_separator + '?$'),
@@ -117,8 +117,8 @@ export class NamedKernelManagerGhostModule {
    */
   async _get_ghost(namedId) {
     this.emit('ghost_load', namedId);
-    const dirpath = NamedKernelManager._get_ghost_directory_path(namedId);
-    const ghost = await NamedKernelManager._load_ghost(this.components.NanikaStorage.backend.fs, dirpath);
+    const dirpath = this._get_ghost_directory_path(namedId);
+    const ghost = await this._load_ghost(this.components.NanikaStorage.backend.fs, dirpath);
     this.emit('ghost_loaded', namedId);
     return ghost;
   }
@@ -128,8 +128,8 @@ export class NamedKernelManagerGhostModule {
    * @param {string} namedId - named id
    * @return {string} ghost directory path
    */
-  static _get_ghost_directory_path(namedId) {
-    return NamedKernelManager._canondirpath(this.components.NanikaStorage.ghost_master_path(namedId));
+  _get_ghost_directory_path(namedId) {
+    return this._canondirpath(this.components.NanikaStorage.ghost_master_path(namedId));
   }
 
   /**
@@ -137,7 +137,7 @@ export class NamedKernelManagerGhostModule {
    * @param {NanikaDirectory} ghost directory contents
    * @return {Promise<Shiori>} ghost(shiori) instance
    */
-  static async _load_ghost(fs, dirpath) {
+  async _load_ghost(fs, dirpath) {
     const shiori = await ShioriLoader.detect_shiori(fs, dirpath);
     return await shiori.load(dirpath);
   }
@@ -153,7 +153,7 @@ export class NamedKernelManagerGhostModule {
     this.emit('load_shell_files', namedId, shellname);
     const directory = await this._get_shell_directory(namedId, shellname);
     this.emit('shell_load', namedId, shellname, directory);
-    const shell = await NamedKernelManager._load_shell(directory, GhostViewClass);
+    const shell = await this._load_shell(directory, GhostViewClass);
     this.emit('shell_loaded', namedId, shellname, shell);
     return shell;
   }
@@ -174,7 +174,7 @@ export class NamedKernelManagerGhostModule {
    * @param {cuttlebone} [GhostViewClass] ghost view class
    * @return {Promise<Shell>} shell instance
    */
-  static _load_shell(directory, GhostViewClass = this.GhostViewClass) {
+  _load_shell(directory, GhostViewClass = this.GhostViewClass) {
     const shell = new GhostViewClass.Shell(directory.asArrayBuffer());
     return shell.load();
   }
@@ -189,7 +189,7 @@ export class NamedKernelManagerGhostModule {
     this.emit('load_balloon_files', balloonname);
     const directory = await this._get_balloon_directory(balloonname);
     this.emit('balloon_load', balloonname, directory);
-    const balloon = await NamedKernelManager._load_balloon(directory, GhostViewClass);
+    const balloon = await this._load_balloon(directory, GhostViewClass);
     this.emit('balloon_loaded', balloonname, shell);
     return balloon;
   }
@@ -209,7 +209,7 @@ export class NamedKernelManagerGhostModule {
    * @param {cuttlebone} [GhostViewClass] ghost view class
    * @return {Promise<Balloon>} balloon instance
    */
-  static _load_balloon(directory, GhostViewClass = this.GhostViewClass) {
+  _load_balloon(directory, GhostViewClass = this.GhostViewClass) {
     const balloon = new GhostViewClass.Balloon(directory.asArrayBuffer());
     return balloon.load();
   }

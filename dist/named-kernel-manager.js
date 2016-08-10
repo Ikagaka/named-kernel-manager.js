@@ -4262,14 +4262,20 @@ var namedKernelManager =
 	     */
 	
 	  }, {
-	    key: '_get_ghost',
-	
+	    key: '_canondirpath',
+	    value: function _canondirpath(dirpath) {
+	      var path_separator = dirpath.match(/[\\\/]/)[0];
+	      return dirpath.replace(new RegExp('\\' + path_separator + '?$'), path_separator);
+	    }
 	
 	    /**
 	     * get ghost(shiori) instance
 	     * @param {string} namedId - named id
 	     * @return {Promise<Shiori>} ghost(shiori) instance
 	     */
+	
+	  }, {
+	    key: '_get_ghost',
 	    value: function () {
 	      var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5(namedId) {
 	        var dirpath, ghost;
@@ -4278,9 +4284,9 @@ var namedKernelManager =
 	            switch (_context5.prev = _context5.next) {
 	              case 0:
 	                this.emit('ghost_load', namedId);
-	                dirpath = _namedKernelManager.NamedKernelManager._get_ghost_directory_path(namedId);
+	                dirpath = this._get_ghost_directory_path(namedId);
 	                _context5.next = 4;
-	                return _namedKernelManager.NamedKernelManager._load_ghost(this.components.NanikaStorage.backend.fs, dirpath);
+	                return this._load_ghost(this.components.NanikaStorage.backend.fs, dirpath);
 	
 	              case 4:
 	                ghost = _context5.sent;
@@ -4310,8 +4316,51 @@ var namedKernelManager =
 	     */
 	
 	  }, {
-	    key: '_get_shell',
+	    key: '_get_ghost_directory_path',
+	    value: function _get_ghost_directory_path(namedId) {
+	      return this._canondirpath(this.components.NanikaStorage.ghost_master_path(namedId));
+	    }
 	
+	    /**
+	     * load ghost(shiori)
+	     * @param {NanikaDirectory} ghost directory contents
+	     * @return {Promise<Shiori>} ghost(shiori) instance
+	     */
+	
+	  }, {
+	    key: '_load_ghost',
+	    value: function () {
+	      var _ref8 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6(fs, dirpath) {
+	        var shiori;
+	        return _regenerator2.default.wrap(function _callee6$(_context6) {
+	          while (1) {
+	            switch (_context6.prev = _context6.next) {
+	              case 0:
+	                _context6.next = 2;
+	                return ShioriLoader.detect_shiori(fs, dirpath);
+	
+	              case 2:
+	                shiori = _context6.sent;
+	                _context6.next = 5;
+	                return shiori.load(dirpath);
+	
+	              case 5:
+	                return _context6.abrupt('return', _context6.sent);
+	
+	              case 6:
+	              case 'end':
+	                return _context6.stop();
+	            }
+	          }
+	        }, _callee6, this);
+	      }));
+	
+	      function _load_ghost(_x20, _x21) {
+	        return _ref8.apply(this, arguments);
+	      }
+	
+	      return _load_ghost;
+	    }()
 	
 	    /**
 	     * get shell instance
@@ -4320,40 +4369,43 @@ var namedKernelManager =
 	     * @param {cuttlebone} [GhostViewClass] ghost view class
 	     * @return {Promise<Shell>} shell instance
 	     */
+	
+	  }, {
+	    key: '_get_shell',
 	    value: function () {
-	      var _ref8 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6(namedId, shellname, GhostViewClass) {
+	      var _ref9 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7(namedId, shellname, GhostViewClass) {
 	        var directory, shell;
-	        return _regenerator2.default.wrap(function _callee6$(_context6) {
+	        return _regenerator2.default.wrap(function _callee7$(_context7) {
 	          while (1) {
-	            switch (_context6.prev = _context6.next) {
+	            switch (_context7.prev = _context7.next) {
 	              case 0:
 	                this.emit('load_shell_files', namedId, shellname);
-	                _context6.next = 3;
+	                _context7.next = 3;
 	                return this._get_shell_directory(namedId, shellname);
 	
 	              case 3:
-	                directory = _context6.sent;
+	                directory = _context7.sent;
 	
 	                this.emit('shell_load', namedId, shellname, directory);
-	                _context6.next = 7;
-	                return _namedKernelManager.NamedKernelManager._load_shell(directory, GhostViewClass);
+	                _context7.next = 7;
+	                return this._load_shell(directory, GhostViewClass);
 	
 	              case 7:
-	                shell = _context6.sent;
+	                shell = _context7.sent;
 	
 	                this.emit('shell_loaded', namedId, shellname, shell);
-	                return _context6.abrupt('return', shell);
+	                return _context7.abrupt('return', shell);
 	
 	              case 10:
 	              case 'end':
-	                return _context6.stop();
+	                return _context7.stop();
 	            }
 	          }
-	        }, _callee6, this);
+	        }, _callee7, this);
 	      }));
 	
-	      function _get_shell(_x20, _x21, _x22) {
-	        return _ref8.apply(this, arguments);
+	      function _get_shell(_x22, _x23, _x24) {
+	        return _ref9.apply(this, arguments);
 	      }
 	
 	      return _get_shell;
@@ -4369,27 +4421,27 @@ var namedKernelManager =
 	  }, {
 	    key: '_get_shell_directory',
 	    value: function () {
-	      var _ref9 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7(namedId, shellname) {
-	        return _regenerator2.default.wrap(function _callee7$(_context7) {
+	      var _ref10 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(namedId, shellname) {
+	        return _regenerator2.default.wrap(function _callee8$(_context8) {
 	          while (1) {
-	            switch (_context7.prev = _context7.next) {
+	            switch (_context8.prev = _context8.next) {
 	              case 0:
-	                _context7.next = 2;
+	                _context8.next = 2;
 	                return this.components.NanikaStorage.shell(namedId, shellname);
 	
 	              case 2:
-	                return _context7.abrupt('return', _context7.sent);
+	                return _context8.abrupt('return', _context8.sent);
 	
 	              case 3:
 	              case 'end':
-	                return _context7.stop();
+	                return _context8.stop();
 	            }
 	          }
-	        }, _callee7, this);
+	        }, _callee8, this);
 	      }));
 	
-	      function _get_shell_directory(_x23, _x24) {
-	        return _ref9.apply(this, arguments);
+	      function _get_shell_directory(_x25, _x26) {
+	        return _ref10.apply(this, arguments);
 	      }
 	
 	      return _get_shell_directory;
@@ -4403,8 +4455,13 @@ var namedKernelManager =
 	     */
 	
 	  }, {
-	    key: '_get_balloon',
+	    key: '_load_shell',
+	    value: function _load_shell(directory) {
+	      var GhostViewClass = arguments.length <= 1 || arguments[1] === undefined ? this.GhostViewClass : arguments[1];
 	
+	      var shell = new GhostViewClass.Shell(directory.asArrayBuffer());
+	      return shell.load();
+	    }
 	
 	    /**
 	     * get balloon instance
@@ -4412,40 +4469,43 @@ var namedKernelManager =
 	     * @param {cuttlebone} [GhostViewClass] ghost view class
 	     * @return {Promise<Balloon>} balloon instance
 	     */
+	
+	  }, {
+	    key: '_get_balloon',
 	    value: function () {
-	      var _ref10 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(balloonname, GhostViewClass) {
+	      var _ref11 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9(balloonname, GhostViewClass) {
 	        var directory, balloon;
-	        return _regenerator2.default.wrap(function _callee8$(_context8) {
+	        return _regenerator2.default.wrap(function _callee9$(_context9) {
 	          while (1) {
-	            switch (_context8.prev = _context8.next) {
+	            switch (_context9.prev = _context9.next) {
 	              case 0:
 	                this.emit('load_balloon_files', balloonname);
-	                _context8.next = 3;
+	                _context9.next = 3;
 	                return this._get_balloon_directory(balloonname);
 	
 	              case 3:
-	                directory = _context8.sent;
+	                directory = _context9.sent;
 	
 	                this.emit('balloon_load', balloonname, directory);
-	                _context8.next = 7;
-	                return _namedKernelManager.NamedKernelManager._load_balloon(directory, GhostViewClass);
+	                _context9.next = 7;
+	                return this._load_balloon(directory, GhostViewClass);
 	
 	              case 7:
-	                balloon = _context8.sent;
+	                balloon = _context9.sent;
 	
 	                this.emit('balloon_loaded', balloonname, shell);
-	                return _context8.abrupt('return', balloon);
+	                return _context9.abrupt('return', balloon);
 	
 	              case 10:
 	              case 'end':
-	                return _context8.stop();
+	                return _context9.stop();
 	            }
 	          }
-	        }, _callee8, this);
+	        }, _callee9, this);
 	      }));
 	
-	      function _get_balloon(_x25, _x26) {
-	        return _ref10.apply(this, arguments);
+	      function _get_balloon(_x28, _x29) {
+	        return _ref11.apply(this, arguments);
 	      }
 	
 	      return _get_balloon;
@@ -4460,27 +4520,27 @@ var namedKernelManager =
 	  }, {
 	    key: '_get_balloon_directory',
 	    value: function () {
-	      var _ref11 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9(balloonname) {
-	        return _regenerator2.default.wrap(function _callee9$(_context9) {
+	      var _ref12 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee10(balloonname) {
+	        return _regenerator2.default.wrap(function _callee10$(_context10) {
 	          while (1) {
-	            switch (_context9.prev = _context9.next) {
+	            switch (_context10.prev = _context10.next) {
 	              case 0:
-	                _context9.next = 2;
+	                _context10.next = 2;
 	                return this.components.NanikaStorage.balloon(balloonname);
 	
 	              case 2:
-	                return _context9.abrupt('return', _context9.sent);
+	                return _context10.abrupt('return', _context10.sent);
 	
 	              case 3:
 	              case 'end':
-	                return _context9.stop();
+	                return _context10.stop();
 	            }
 	          }
-	        }, _callee9, this);
+	        }, _callee10, this);
 	      }));
 	
-	      function _get_balloon_directory(_x27) {
-	        return _ref11.apply(this, arguments);
+	      function _get_balloon_directory(_x30) {
+	        return _ref12.apply(this, arguments);
 	      }
 	
 	      return _get_balloon_directory;
@@ -4494,8 +4554,13 @@ var namedKernelManager =
 	     */
 	
 	  }, {
-	    key: 'installNar',
+	    key: '_load_balloon',
+	    value: function _load_balloon(directory) {
+	      var GhostViewClass = arguments.length <= 1 || arguments[1] === undefined ? this.GhostViewClass : arguments[1];
 	
+	      var balloon = new GhostViewClass.Balloon(directory.asArrayBuffer());
+	      return balloon.load();
+	    }
 	
 	    /**
 	     * install named
@@ -4503,45 +4568,48 @@ var namedKernelManager =
 	     * @param {NamedKernel | string} [from] who handled the target? kernel or named id
 	     * @return {Promise}
 	     */
+	
+	  }, {
+	    key: 'installNar',
 	    value: function () {
-	      var _ref12 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee10(target) {
+	      var _ref13 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee11(target) {
 	        var from = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 	        var nanikaStorage, nar, dirpath, sakuraname, install_results, ghost_result, balloon_result, profile;
-	        return _regenerator2.default.wrap(function _callee10$(_context10) {
+	        return _regenerator2.default.wrap(function _callee11$(_context11) {
 	          while (1) {
-	            switch (_context10.prev = _context10.next) {
+	            switch (_context11.prev = _context11.next) {
 	              case 0:
 	                nanikaStorage = this.components.NanikaStorage;
 	
 	                this.emit('install_begin', target);
 	                nar = void 0;
-	                _context10.prev = 3;
+	                _context11.prev = 3;
 	
 	                if (!(target instanceof Blob)) {
-	                  _context10.next = 10;
+	                  _context11.next = 10;
 	                  break;
 	                }
 	
-	                _context10.next = 7;
+	                _context11.next = 7;
 	                return NarLoader.loadFromBlob(target);
 	
 	              case 7:
-	                nar = _context10.sent;
-	                _context10.next = 17;
+	                nar = _context11.sent;
+	                _context11.next = 17;
 	                break;
 	
 	              case 10:
 	                if (!(target instanceof URL || target instanceof String || typeof target === 'string')) {
-	                  _context10.next = 16;
+	                  _context11.next = 16;
 	                  break;
 	                }
 	
-	                _context10.next = 13;
+	                _context11.next = 13;
 	                return NarLoader.loadFromURL(target);
 	
 	              case 13:
-	                nar = _context10.sent;
-	                _context10.next = 17;
+	                nar = _context11.sent;
+	                _context11.next = 17;
 	                break;
 	
 	              case 16:
@@ -4555,19 +4623,19 @@ var namedKernelManager =
 	                // TODO: fromの他形式対応
 	
 	                sakuraname = nanikaStorage.ghost_descript(dirpath)['sakura.name'];
-	                _context10.next = 22;
+	                _context11.next = 22;
 	                return nanikaStorage.install_nar(nar, dirpath, sakuraname);
 	
 	              case 22:
-	                install_results = _context10.sent;
+	                install_results = _context11.sent;
 	
 	                if (install_results) {
-	                  _context10.next = 26;
+	                  _context11.next = 26;
 	                  break;
 	                }
 	
 	                this.emit('install_not_accepted', target, nar);
-	                return _context10.abrupt('return');
+	                return _context11.abrupt('return');
 	
 	              case 26:
 	                ghost_result = void 0, balloon_result = void 0;
@@ -4581,15 +4649,15 @@ var namedKernelManager =
 	                });
 	
 	                if (!ghost_result) {
-	                  _context10.next = 36;
+	                  _context11.next = 36;
 	                  break;
 	                }
 	
-	                _context10.next = 31;
+	                _context11.next = 31;
 	                return nanikaStorage.ghost_profile(ghost_result.directory);
 	
 	              case 31:
-	                profile = _context10.sent;
+	                profile = _context11.sent;
 	
 	                if (!profile.shellname) profile.shellname = 'master';
 	                if (!profile.balloonname) {
@@ -4600,31 +4668,31 @@ var namedKernelManager =
 	                    profile.balloonname = 'origin'; // TODO: 設定を読む
 	                  }
 	                }
-	                _context10.next = 36;
+	                _context11.next = 36;
 	                return nanikaStorage.ghost_profile(ghost_result.directory, profile);
 	
 	              case 36:
 	                this.emit('install_succeed', target, nar);
-	                _context10.next = 43;
+	                _context11.next = 43;
 	                break;
 	
 	              case 39:
-	                _context10.prev = 39;
-	                _context10.t0 = _context10['catch'](3);
+	                _context11.prev = 39;
+	                _context11.t0 = _context11['catch'](3);
 	
-	                this.emit('install_failure', _context10.t0);
-	                throw _context10.t0;
+	                this.emit('install_failure', _context11.t0);
+	                throw _context11.t0;
 	
 	              case 43:
 	              case 'end':
-	                return _context10.stop();
+	                return _context11.stop();
 	            }
 	          }
-	        }, _callee10, this, [[3, 39]]);
+	        }, _callee11, this, [[3, 39]]);
 	      }));
 	
-	      function installNar(_x28, _x29) {
-	        return _ref12.apply(this, arguments);
+	      function installNar(_x32, _x33) {
+	        return _ref13.apply(this, arguments);
 	      }
 	
 	      return installNar;
@@ -4650,74 +4718,6 @@ var namedKernelManager =
 	      this._GhostViewClass = value;
 	    }
 	  }], [{
-	    key: '_canondirpath',
-	    value: function _canondirpath(dirpath) {
-	      var path_separator = dirpath.match(/[\\\/]/)[0];
-	      return dirpath.replace(new RegExp('\\' + path_separator + '?$'), path_separator);
-	    }
-	  }, {
-	    key: '_get_ghost_directory_path',
-	    value: function _get_ghost_directory_path(namedId) {
-	      return _namedKernelManager.NamedKernelManager._canondirpath(this.components.NanikaStorage.ghost_master_path(namedId));
-	    }
-	
-	    /**
-	     * load ghost(shiori)
-	     * @param {NanikaDirectory} ghost directory contents
-	     * @return {Promise<Shiori>} ghost(shiori) instance
-	     */
-	
-	  }, {
-	    key: '_load_ghost',
-	    value: function () {
-	      var _ref13 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee11(fs, dirpath) {
-	        var shiori;
-	        return _regenerator2.default.wrap(function _callee11$(_context11) {
-	          while (1) {
-	            switch (_context11.prev = _context11.next) {
-	              case 0:
-	                _context11.next = 2;
-	                return ShioriLoader.detect_shiori(fs, dirpath);
-	
-	              case 2:
-	                shiori = _context11.sent;
-	                _context11.next = 5;
-	                return shiori.load(dirpath);
-	
-	              case 5:
-	                return _context11.abrupt('return', _context11.sent);
-	
-	              case 6:
-	              case 'end':
-	                return _context11.stop();
-	            }
-	          }
-	        }, _callee11, this);
-	      }));
-	
-	      function _load_ghost(_x31, _x32) {
-	        return _ref13.apply(this, arguments);
-	      }
-	
-	      return _load_ghost;
-	    }()
-	  }, {
-	    key: '_load_shell',
-	    value: function _load_shell(directory) {
-	      var GhostViewClass = arguments.length <= 1 || arguments[1] === undefined ? this.GhostViewClass : arguments[1];
-	
-	      var shell = new GhostViewClass.Shell(directory.asArrayBuffer());
-	      return shell.load();
-	    }
-	  }, {
-	    key: '_load_balloon',
-	    value: function _load_balloon(directory) {
-	      var GhostViewClass = arguments.length <= 1 || arguments[1] === undefined ? this.GhostViewClass : arguments[1];
-	
-	      var balloon = new GhostViewClass.Balloon(directory.asArrayBuffer());
-	      return balloon.load();
-	    }
-	  }, {
 	    key: 'GhostViewClass',
 	
 	    /**
