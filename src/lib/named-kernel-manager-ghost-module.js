@@ -86,7 +86,7 @@ export class NamedKernelManagerGhostModule {
     ]).then(
       ([shiori, shell, balloon]) => {
         const shiorif = new Shiorif(shiori);
-        const named = namedmanager.materialize2(shell, balloon);
+        const named = this.components.NamedManager.materialize2(shell, balloon);
         return new GhostKernel({
           Shiorif: shiorif,
           Named: named,
@@ -190,7 +190,7 @@ export class NamedKernelManagerGhostModule {
     const directory = await this._get_balloon_directory(balloonname);
     this.emit('balloon_load', balloonname, directory);
     const balloon = await this._load_balloon(directory, GhostViewClass);
-    this.emit('balloon_loaded', balloonname, shell);
+    this.emit('balloon_loaded', balloonname, balloon);
     return balloon;
   }
 

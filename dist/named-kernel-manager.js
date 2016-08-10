@@ -4231,7 +4231,7 @@ var namedKernelManager =
 	                  var balloon = _ref6[2];
 	
 	                  var shiorif = new _shiorif.Shiorif(shiori);
-	                  var named = namedmanager.materialize2(shell, balloon);
+	                  var named = _this.components.NamedManager.materialize2(shell, balloon);
 	                  return new _ghostKernel.GhostKernel({
 	                    Shiorif: shiorif,
 	                    Named: named,
@@ -4493,7 +4493,7 @@ var namedKernelManager =
 	              case 7:
 	                balloon = _context9.sent;
 	
-	                this.emit('balloon_loaded', balloonname, shell);
+	                this.emit('balloon_loaded', balloonname, balloon);
 	                return _context9.abrupt('return', balloon);
 	
 	              case 10:
