@@ -241,12 +241,6 @@ export class NamedKernelManagerGhostModule {
         this.emit('install_not_accepted', target, nar);
         return;
       }
-      // 初期profileを設定
-      const profile = await nanikaStorage.ghost_profile(ghost_result.directory);
-      profile.shellname = 'master';
-      profile.balloonname = 'origin'; // TODO: 設定を読む
-      // TODO: vanish回数など
-      // 同梱バルーンを初期設定
       let ghost_result, balloon_result;
       install_results.forEach((install_result) => {
         if (install_result.type === 'ghost') {
@@ -255,6 +249,12 @@ export class NamedKernelManagerGhostModule {
           balloon_result = install_result;
         }
       });
+      // 初期profileを設定
+      // TODO: vanish回数など
+      const profile = await nanikaStorage.ghost_profile(ghost_result.directory);
+      profile.shellname = 'master';
+      profile.balloonname = 'origin'; // TODO: 設定を読む
+      // 同梱バルーンを初期設定
       if (ghost_result && balloon_result) {
         profile.balloonname = balloon_result.directory;
       }
