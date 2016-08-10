@@ -1,6 +1,6 @@
 {
   "name": "named-kernel-manager",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "module named-kernel-manager",
   "keywords": [],
   "main": "./lib/named-kernel-manager.js",
