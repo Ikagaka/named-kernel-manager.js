@@ -4177,7 +4177,7 @@ var namedKernelManager =
 	            switch (_context3.prev = _context3.next) {
 	              case 0:
 	                _context3.next = 2;
-	                return this._get_ghost_profile(namedId, defaultProfile);
+	                return this._get_ghost_profile(namedId, profile);
 	
 	              case 2:
 	                _profile = _context3.sent;
