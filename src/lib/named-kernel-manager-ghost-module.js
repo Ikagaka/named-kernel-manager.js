@@ -140,7 +140,8 @@ export class NamedKernelManagerGhostModule {
    */
   async _load_ghost(fs, dirpath) {
     const shiori = await ShioriLoader.detect_shiori(fs, dirpath);
-    return await shiori.load(dirpath);
+    const result = await shiori.load(dirpath); // TODO load error
+    return shiori;
   }
 
   /**
