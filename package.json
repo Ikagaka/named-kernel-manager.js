@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "cuttlebone": "^0.2.7",
-    "routable-component": "1.0.0",
+    "ghost-kernel": "^3.0.0",
+    "routable-component": "^4.0.0",
     "sakurascript": "0.0.2",
     "shiorif": "^1.0.0"
   },

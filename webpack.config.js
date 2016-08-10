@@ -18,7 +18,7 @@ export default {
     ],
   },
   entry: {
-    'named-kernel-manager': './src/lib/named-kernel-manager.js',
+    'named-kernel-manager': './src/lib/index.js',
   },
   output: {
     path: __dirname + '/dist',

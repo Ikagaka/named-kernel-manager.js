@@ -23,50 +23,61 @@ export class NamedKernelManager extends RoutableComponent {
    * @param {NamedManager} components.NamedManager - named manager
    * @param {TimerEventSource} components.TimerEventSource - Timer event source
    * @param {RoutableComponentRoutes} [routes] - ルーティング
-   * @param {Hash<NamedKernelManagerController>} [controllers] - コントローラ
+   * @param {Hash<NamedKernelManagerController>} [controllers_classes] - コントローラ
    */
-  constructor(components, routes = new RoutableComponentRoutes(NamedKernelManagerRoutings), controllers = NamedKernelManagerControllers) {
-    super(components);
-    this.components.NamedKernelManager = this;
+  constructor(components, routes = new RoutableComponentRoutes(NamedKernelManagerRoutings), controllerClasses = NamedKernelManagerControllers) {
+    super(components, routes, controllerClasses);
+    this.registerComponent('NamedKernelManager', this);
 
     /** @type {NamedKernel[]} */
-    this._named_kernels = {};
-
-    this._routes = routes;
-    this.routes.setup_to(this, controllers);
+    this._namedKernels = {};
   }
 
   /**
-   * Kernel event routes
-   * @type {RoutableComponentRoutes}
+   * start manager (emits start event)
+   * @return {void}
    */
-  get routes() { return this._routes; }
+  async start() {
+    this.emit('start');
+  }
+
+  /**
+   * close manager (emits close event)
+   * @return {void}
+   */
+  async close() {
+    this.emit('close');
+  }
+
+  profile(newProfile) {
+    return this.components.NanikaStorage.base_profile(newProfile);
+  }
 
   /**
    * existing named ids
    * @return {Array<string>} named ids
    */
-  named_ids() {
-    return Object.keys(this._named_kernels);
+  namedIds() {
+    return Object.keys(this._namedKernels);
   }
 
   /**
    * named instance exists or not
-   * @param {string} named_id - named id
+   * @param {string} namedId - named id
    * @return {boolean} exists or not
    */
-  is_kernel_exists(named_id) {
+  isKernelExists(namedId) {
     // in や [] 等ではprototypeのものも認識するため
-    return this._named_kernels.hasOwnProperty(named_id);
+    return this._namedKernels.hasOwnProperty(namedId);
   }
 
   /**
    * named kernel instance
-   * @param {string} named_id - named id
+   * @param {string} namedId - named id
    * @return {NamedKernel} named instance
    */
-  kernel(named_id) {
-    return this.is_kernel_exists(named_id) ? this._named_kernels[named_id].kernel : null;
+  kernel(namedId) {
+    return this.isKernelExists(namedId) ? this._namedKernels[namedId].kernel : null;
   }
 
   /**
@@ -74,58 +85,89 @@ export class NamedKernelManager extends RoutableComponent {
    * @param {NamedKernel} kernel - named kernel
    * @return {string} named id
    */
-  named_id(kernel) {
-    return Object.keys(this._named_kernels).find((named_id) => this.kernel(named_id) === kernel);
+  namedId(kernel) {
+    return Object.keys(this._namedKernels).find((namedId) => this.kernel(namedId) === kernel);
   }
 
   /**
    * register named kernel
-   * @param {string} named_id - named id
+   * @param {string} namedId - named id
    * @param {NamedKernel} kernel - kernel
    * @return {NamedKernel} kernel
    */
-  register_kernel(named_id, kernel) {
-    if (this.is_kernel_exists(named_id)) {
-      throw new Error(`kernel [${named_id}] already exists`);
+  registerKernel(namedId, kernel) {
+    if (this.isKernelExists(namedId)) {
+      throw new Error(`kernel [${namedId}] already exists`);
     }
-    this._named_kernels[named_id] = kernel;
-    this.emit('kernel_registered', named_id);
+    this._namedKernels[namedId] = kernel;
+    this.emit('kernel_registered', namedId);
     return kernel;
   }
 
   /**
    * unregister named kernel
-   * @param {string} named_id - named id
+   * @param {string} namedId - named id
    * @return {void}
    */
-  unregister_kernel(named_id) {
-    if (!this.is_kernel_exists(named_id)) {
-      throw new Error(`kernel [${named_id}] not exists`);
+  unregisterKernel(namedId) {
+    if (!this.isKernelExists(namedId)) {
+      throw new Error(`kernel [${namedId}] not exists`);
     }
-    delete this._named_kernels[named_id];
-    this.emit('kernel_unregistered', named_id);
+    delete this._namedKernels[namedId];
+    this.emit('kernel_unregistered', namedId);
   }
 
   /**
    * send communication
-   * @param {string} from_id - from named id
-   * @param {string} to_id - to named id
+   * @param {string} fromId - from named id
+   * @param {string} toId - to named id
    * @param {any} content - communication content
    * @return {Promise<transactionlike>} transaction
    */
-  send_communication(from_id, to_id, content) {
+  sendCommunication(fromId, toId, content) {
   }
 
   /**
    * send notice
-   * @param {string} from_id - from named id
-   * @param {string} to_id - to named id
+   * @param {string} fromId - from named id
+   * @param {string} toId - to named id
    * @param {any} content - communication content
    * @return {Promise<transactionlike>} transaction
    */
-  send_notice(from_id, to_id, content) {
+  sendNotice(fromId, toId, content) {
     // other close etc
+  }
+
+  /**
+   * install named
+   * @param {any} target install target resource (file, url or some)
+   * @param {NamedKernel} from who handled the target?
+   * @return {Promise<any>}
+   */
+  async installNamed(target, from) {
+    // TODO: 他形式対応
+    return await this.installNar(target, from);
   }
 }
 
 mixin(NamedKernelManager, NamedKernelManagerGhostModule);
+
+/**
+ * マネージャ用のコントローラ
+ * @implements {RoutableComponentController}
+ */
+export class NamedKernelManagerController {
+  /**
+   * コンストラクタ
+   * @param {NamedKernelManager} manager マネージャ
+   */
+  constructor(manager) {
+    this._manager = manager;
+  }
+
+  /**
+   * マネージャ
+   * @type {NamedKernelManager}
+   */
+  get manager() { return this._manager; }
+}
