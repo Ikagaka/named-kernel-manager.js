@@ -249,16 +249,21 @@ export class NamedKernelManagerGhostModule {
           balloon_result = install_result;
         }
       });
-      // 初期profileを設定
-      // TODO: vanish回数など
-      const profile = await nanikaStorage.ghost_profile(ghost_result.directory);
-      profile.shellname = 'master';
-      profile.balloonname = 'origin'; // TODO: 設定を読む
-      // 同梱バルーンを初期設定
-      if (ghost_result && balloon_result) {
-        profile.balloonname = balloon_result.directory;
+      if (ghost_result) {
+        // 初期profileを設定
+        // TODO: vanish回数など
+        const profile = await nanikaStorage.ghost_profile(ghost_result.directory);
+        if (!profile.shellname) profile.shellname = 'master';
+        if (!profile.balloonname) {
+          if (balloon_result) {
+            // 同梱バルーンを初期設定
+            profile.balloonname = balloon_result.directory;
+          } else {
+            profile.balloonname = 'origin'; // TODO: 設定を読む
+          }
+        }
+        await nanikaStorage.ghost_profile(ghost_result.directory, profile);
       }
-      await nanikaStorage.ghost_profile(ghost_result.directory, profile);
       this.emit('install_succeed', target, nar);
     } catch (error) {
       this.emit('install_failure', error);
