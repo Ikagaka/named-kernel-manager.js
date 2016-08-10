@@ -4235,6 +4235,7 @@ var namedKernelManager =
 	                  return new _ghostKernel.GhostKernel({
 	                    Shiorif: shiorif,
 	                    Named: named,
+	                    NanikaStorage: _this.components.NanikaStorage,
 	                    NamedKernelManager: _this,
 	                    TimerEventSource: _this.components.TimerEventSource
 	                  }, routes, controllers);

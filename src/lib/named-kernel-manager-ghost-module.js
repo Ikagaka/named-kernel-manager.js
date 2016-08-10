@@ -90,6 +90,7 @@ export class NamedKernelManagerGhostModule {
         return new GhostKernel({
           Shiorif: shiorif,
           Named: named,
+          NanikaStorage: this.components.NanikaStorage,
           NamedKernelManager: this,
           TimerEventSource: this.components.TimerEventSource,
         }, routes, controllers);
