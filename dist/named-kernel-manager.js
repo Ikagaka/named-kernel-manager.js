@@ -4134,7 +4134,7 @@ var namedKernelManager =
 	                }
 	
 	                _context2.next = 4;
-	                return this.components.nanikaStorage.ghost_profile(namedId);
+	                return this.components.NanikaStorage.ghost_profile(namedId);
 	
 	              case 4:
 	                _context2.t0 = _context2.sent;
@@ -4223,7 +4223,7 @@ var namedKernelManager =
 	          while (1) {
 	            switch (_context4.prev = _context4.next) {
 	              case 0:
-	                return _context4.abrupt('return', _promise2.default.all([this._get_ghost(namedId, this.components.nanikaStorage), this._get_shell(namedId, shellname, this.components.nanikaStorage, GhostViewClass), this._get_balloon(balloonname, this.components.nanikaStorage, GhostViewClass)]).then(function (_ref5) {
+	                return _context4.abrupt('return', _promise2.default.all([this._get_ghost(namedId, this.components.NanikaStorage), this._get_shell(namedId, shellname, this.components.NanikaStorage, GhostViewClass), this._get_balloon(balloonname, this.components.NanikaStorage, GhostViewClass)]).then(function (_ref5) {
 	                  var _ref6 = (0, _slicedToArray3.default)(_ref5, 3);
 	
 	                  var shiori = _ref6[0];
@@ -4280,7 +4280,7 @@ var namedKernelManager =
 	                this.emit('ghost_load', namedId);
 	                dirpath = _namedKernelManager.NamedKernelManager._get_ghost_directory_path(namedId);
 	                _context5.next = 4;
-	                return _namedKernelManager.NamedKernelManager._load_ghost(this.components.nanikaStorage.backend.fs, dirpath);
+	                return _namedKernelManager.NamedKernelManager._load_ghost(this.components.NanikaStorage.backend.fs, dirpath);
 	
 	              case 4:
 	                ghost = _context5.sent;
@@ -4375,7 +4375,7 @@ var namedKernelManager =
 	            switch (_context7.prev = _context7.next) {
 	              case 0:
 	                _context7.next = 2;
-	                return this.components.nanikaStorage.shell(namedId, shellname);
+	                return this.components.NanikaStorage.shell(namedId, shellname);
 	
 	              case 2:
 	                return _context7.abrupt('return', _context7.sent);
@@ -4466,7 +4466,7 @@ var namedKernelManager =
 	            switch (_context9.prev = _context9.next) {
 	              case 0:
 	                _context9.next = 2;
-	                return this.components.nanikaStorage.balloon(balloonname);
+	                return this.components.NanikaStorage.balloon(balloonname);
 	
 	              case 2:
 	                return _context9.abrupt('return', _context9.sent);
@@ -4658,7 +4658,7 @@ var namedKernelManager =
 	  }, {
 	    key: '_get_ghost_directory_path',
 	    value: function _get_ghost_directory_path(namedId) {
-	      return _namedKernelManager.NamedKernelManager._canondirpath(this.components.nanikaStorage.ghost_master_path(namedId));
+	      return _namedKernelManager.NamedKernelManager._canondirpath(this.components.NanikaStorage.ghost_master_path(namedId));
 	    }
 	
 	    /**

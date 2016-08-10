@@ -52,7 +52,7 @@ export class NamedKernelManagerGhostModule {
    * @param {GhostProfile} [profile] - profile
    */
   async _get_ghost_profile(namedId, profile) {
-    return profile || await this.components.nanikaStorage.ghost_profile(namedId);
+    return profile || await this.components.NanikaStorage.ghost_profile(namedId);
   }
 
   /**
@@ -80,9 +80,9 @@ export class NamedKernelManagerGhostModule {
    */
   async _get_ghost_kernel(namedId, shellname, balloonname, routes, controllers, GhostViewClass) {
     return Promise.all([
-      this._get_ghost(namedId, this.components.nanikaStorage),
-      this._get_shell(namedId, shellname, this.components.nanikaStorage, GhostViewClass),
-      this._get_balloon(balloonname, this.components.nanikaStorage, GhostViewClass),
+      this._get_ghost(namedId, this.components.NanikaStorage),
+      this._get_shell(namedId, shellname, this.components.NanikaStorage, GhostViewClass),
+      this._get_balloon(balloonname, this.components.NanikaStorage, GhostViewClass),
     ]).then(
       ([shiori, shell, balloon]) => {
         const shiorif = new Shiorif(shiori);
@@ -118,7 +118,7 @@ export class NamedKernelManagerGhostModule {
   async _get_ghost(namedId) {
     this.emit('ghost_load', namedId);
     const dirpath = NamedKernelManager._get_ghost_directory_path(namedId);
-    const ghost = await NamedKernelManager._load_ghost(this.components.nanikaStorage.backend.fs, dirpath);
+    const ghost = await NamedKernelManager._load_ghost(this.components.NanikaStorage.backend.fs, dirpath);
     this.emit('ghost_loaded', namedId);
     return ghost;
   }
@@ -129,7 +129,7 @@ export class NamedKernelManagerGhostModule {
    * @return {string} ghost directory path
    */
   static _get_ghost_directory_path(namedId) {
-    return NamedKernelManager._canondirpath(this.components.nanikaStorage.ghost_master_path(namedId));
+    return NamedKernelManager._canondirpath(this.components.NanikaStorage.ghost_master_path(namedId));
   }
 
   /**
@@ -165,7 +165,7 @@ export class NamedKernelManagerGhostModule {
    * @return {Promise<NanikaDirectory>} shell directory contents
    */
   async _get_shell_directory(namedId, shellname) {
-    return await this.components.nanikaStorage.shell(namedId, shellname);
+    return await this.components.NanikaStorage.shell(namedId, shellname);
   }
 
   /**
@@ -200,7 +200,7 @@ export class NamedKernelManagerGhostModule {
    * @return {Promise<NanikaDirectory>} balloon directory contents
    */
   async _get_balloon_directory(balloonname) {
-    return await this.components.nanikaStorage.balloon(balloonname);
+    return await this.components.NanikaStorage.balloon(balloonname);
   }
 
   /**
