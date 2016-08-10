@@ -4223,7 +4223,7 @@ var namedKernelManager =
 	          while (1) {
 	            switch (_context4.prev = _context4.next) {
 	              case 0:
-	                return _context4.abrupt('return', _promise2.default.all([this._get_ghost(namedId, this.components.NanikaStorage), this._get_shell(namedId, shellname, this.components.NanikaStorage, GhostViewClass), this._get_balloon(balloonname, this.components.NanikaStorage, GhostViewClass)]).then(function (_ref5) {
+	                return _context4.abrupt('return', _promise2.default.all([this._get_ghost(namedId), this._get_shell(namedId, shellname, GhostViewClass), this._get_balloon(balloonname, GhostViewClass)]).then(function (_ref5) {
 	                  var _ref6 = (0, _slicedToArray3.default)(_ref5, 3);
 	
 	                  var shiori = _ref6[0];

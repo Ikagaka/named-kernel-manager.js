@@ -80,9 +80,9 @@ export class NamedKernelManagerGhostModule {
    */
   async _get_ghost_kernel(namedId, shellname, balloonname, routes, controllers, GhostViewClass) {
     return Promise.all([
-      this._get_ghost(namedId, this.components.NanikaStorage),
-      this._get_shell(namedId, shellname, this.components.NanikaStorage, GhostViewClass),
-      this._get_balloon(balloonname, this.components.NanikaStorage, GhostViewClass),
+      this._get_ghost(namedId),
+      this._get_shell(namedId, shellname, GhostViewClass),
+      this._get_balloon(balloonname, GhostViewClass),
     ]).then(
       ([shiori, shell, balloon]) => {
         const shiorif = new Shiorif(shiori);
