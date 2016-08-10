@@ -308,7 +308,7 @@ var namedKernelManager =
 	      if (this.isKernelExists(namedId)) {
 	        throw new Error('kernel [' + namedId + '] already exists');
 	      }
-	      this._namedKernels[namedId] = kernel;
+	      this._namedKernels[namedId] = { kernel: kernel };
 	      this.emit('kernel_registered', namedId);
 	      return kernel;
 	    }
