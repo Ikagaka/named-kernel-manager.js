@@ -65,7 +65,7 @@ export class NamedKernelManagerGhostModule {
    */
   async _getGhostKernelAsProfile(namedId, profile, routes, controllers, GhostViewClass) {
     const _profile = await this._get_ghost_profile(namedId, profile);
-    return await this._get_ghost_kernel(namedId, _profile.shell_name, _profile.balloon_name, routes, controllers, GhostViewClass);
+    return await this._get_ghost_kernel(namedId, _profile.shellname, _profile.balloonname, routes, controllers, GhostViewClass);
   }
 
   /**

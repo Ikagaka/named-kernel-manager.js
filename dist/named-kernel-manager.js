@@ -4182,7 +4182,7 @@ var namedKernelManager =
 	              case 2:
 	                _profile = _context3.sent;
 	                _context3.next = 5;
-	                return this._get_ghost_kernel(namedId, _profile.shell_name, _profile.balloon_name, routes, controllers, GhostViewClass);
+	                return this._get_ghost_kernel(namedId, _profile.shellname, _profile.balloonname, routes, controllers, GhostViewClass);
 	
 	              case 5:
 	                return _context3.abrupt('return', _context3.sent);
