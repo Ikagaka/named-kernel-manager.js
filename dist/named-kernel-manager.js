@@ -209,19 +209,20 @@ var namedKernelManager =
 	    }()
 	
 	    /**
-	     * close manager (emits close event)
+	     * boot named (emits boot event)
+	     * @param {string} namedId named id
 	     * @return {void}
 	     */
 	
 	  }, {
-	    key: 'close',
+	    key: 'bootNamed',
 	    value: function () {
-	      var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
+	      var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(namedId) {
 	        return _regenerator2.default.wrap(function _callee2$(_context2) {
 	          while (1) {
 	            switch (_context2.prev = _context2.next) {
 	              case 0:
-	                this.emit('close');
+	                this.emit('boot_named', namedId);
 	
 	              case 1:
 	              case 'end':
@@ -231,11 +232,133 @@ var namedKernelManager =
 	        }, _callee2, this);
 	      }));
 	
-	      function close() {
+	      function bootNamed(_x3) {
 	        return _ref2.apply(this, arguments);
 	      }
 	
+	      return bootNamed;
+	    }()
+	
+	    /**
+	     * close named (emits close event)
+	     * @param {string} namedId named id
+	     * @return {void}
+	     */
+	
+	  }, {
+	    key: 'closeNamed',
+	    value: function () {
+	      var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(namedId) {
+	        return _regenerator2.default.wrap(function _callee3$(_context3) {
+	          while (1) {
+	            switch (_context3.prev = _context3.next) {
+	              case 0:
+	                this.emit('close_named', namedId);
+	
+	              case 1:
+	              case 'end':
+	                return _context3.stop();
+	            }
+	          }
+	        }, _callee3, this);
+	      }));
+	
+	      function closeNamed(_x4) {
+	        return _ref3.apply(this, arguments);
+	      }
+	
+	      return closeNamed;
+	    }()
+	
+	    /**
+	     * change named (emits change event)
+	     * @param {string} namedId named id
+	     * @return {void}
+	     */
+	
+	  }, {
+	    key: 'changeNamed',
+	    value: function () {
+	      var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(oldNamedId, newNamedId) {
+	        return _regenerator2.default.wrap(function _callee4$(_context4) {
+	          while (1) {
+	            switch (_context4.prev = _context4.next) {
+	              case 0:
+	                this.emit('change_named', oldNamedId, newNamedId);
+	
+	              case 1:
+	              case 'end':
+	                return _context4.stop();
+	            }
+	          }
+	        }, _callee4, this);
+	      }));
+	
+	      function changeNamed(_x5, _x6) {
+	        return _ref4.apply(this, arguments);
+	      }
+	
+	      return changeNamed;
+	    }()
+	
+	    /**
+	     * close manager (emits close event)
+	     * @return {void}
+	     */
+	
+	  }, {
+	    key: 'close',
+	    value: function () {
+	      var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5() {
+	        return _regenerator2.default.wrap(function _callee5$(_context5) {
+	          while (1) {
+	            switch (_context5.prev = _context5.next) {
+	              case 0:
+	                this.emit('close');
+	
+	              case 1:
+	              case 'end':
+	                return _context5.stop();
+	            }
+	          }
+	        }, _callee5, this);
+	      }));
+	
+	      function close() {
+	        return _ref5.apply(this, arguments);
+	      }
+	
 	      return close;
+	    }()
+	
+	    /**
+	     * halt manager (emits halt event)
+	     * @return {void}
+	     */
+	
+	  }, {
+	    key: 'halt',
+	    value: function () {
+	      var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6() {
+	        return _regenerator2.default.wrap(function _callee6$(_context6) {
+	          while (1) {
+	            switch (_context6.prev = _context6.next) {
+	              case 0:
+	                this.emit('halt');
+	
+	              case 1:
+	              case 'end':
+	                return _context6.stop();
+	            }
+	          }
+	        }, _callee6, this);
+	      }));
+	
+	      function halt() {
+	        return _ref6.apply(this, arguments);
+	      }
+	
+	      return halt;
 	    }()
 	  }, {
 	    key: 'profile',
@@ -365,27 +488,27 @@ var namedKernelManager =
 	  }, {
 	    key: 'installNamed',
 	    value: function () {
-	      var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(target, from) {
-	        return _regenerator2.default.wrap(function _callee3$(_context3) {
+	      var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7(target, from) {
+	        return _regenerator2.default.wrap(function _callee7$(_context7) {
 	          while (1) {
-	            switch (_context3.prev = _context3.next) {
+	            switch (_context7.prev = _context7.next) {
 	              case 0:
-	                _context3.next = 2;
+	                _context7.next = 2;
 	                return this.installNar(target, from);
 	
 	              case 2:
-	                return _context3.abrupt('return', _context3.sent);
+	                return _context7.abrupt('return', _context7.sent);
 	
 	              case 3:
 	              case 'end':
-	                return _context3.stop();
+	                return _context7.stop();
 	            }
 	          }
-	        }, _callee3, this);
+	        }, _callee7, this);
 	      }));
 	
-	      function installNamed(_x3, _x4) {
-	        return _ref3.apply(this, arguments);
+	      function installNamed(_x7, _x8) {
+	        return _ref7.apply(this, arguments);
 	      }
 	
 	      return installNamed;
