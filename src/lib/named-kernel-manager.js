@@ -44,28 +44,31 @@ export class NamedKernelManager extends RoutableComponent {
   /**
    * boot named (emits boot event)
    * @param {string} namedId named id
+   * @param {string} fromNamedId from named id
    * @return {void}
    */
-  async bootNamed(namedId) {
-    this.emit('boot_named', namedId);
+  async bootNamed(namedId, fromNamedId) {
+    this.emit('boot_named', namedId, fromNamedId);
   }
 
   /**
    * close named (emits close event)
    * @param {string} namedId named id
+   * @param {string} fromNamedId from named id
    * @return {void}
    */
-  async closeNamed(namedId) {
+  async closeNamed(namedId, fromNamedId) {
     this.emit('close_named', namedId);
   }
 
   /**
    * change named (emits change event)
    * @param {string} namedId named id
+   * @param {string} fromNamedId from named id
    * @return {void}
    */
-  async changeNamed(oldNamedId, newNamedId) {
-    this.emit('change_named', oldNamedId, newNamedId);
+  async changeNamed(namedId, fromNamedId) {
+    this.emit('change_named', namedId, fromNamedId);
   }
 
   /**

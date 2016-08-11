@@ -211,18 +211,19 @@ var namedKernelManager =
 	    /**
 	     * boot named (emits boot event)
 	     * @param {string} namedId named id
+	     * @param {string} fromNamedId from named id
 	     * @return {void}
 	     */
 	
 	  }, {
 	    key: 'bootNamed',
 	    value: function () {
-	      var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(namedId) {
+	      var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(namedId, fromNamedId) {
 	        return _regenerator2.default.wrap(function _callee2$(_context2) {
 	          while (1) {
 	            switch (_context2.prev = _context2.next) {
 	              case 0:
-	                this.emit('boot_named', namedId);
+	                this.emit('boot_named', namedId, fromNamedId);
 	
 	              case 1:
 	              case 'end':
@@ -232,7 +233,7 @@ var namedKernelManager =
 	        }, _callee2, this);
 	      }));
 	
-	      function bootNamed(_x3) {
+	      function bootNamed(_x3, _x4) {
 	        return _ref2.apply(this, arguments);
 	      }
 	
@@ -242,13 +243,14 @@ var namedKernelManager =
 	    /**
 	     * close named (emits close event)
 	     * @param {string} namedId named id
+	     * @param {string} fromNamedId from named id
 	     * @return {void}
 	     */
 	
 	  }, {
 	    key: 'closeNamed',
 	    value: function () {
-	      var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(namedId) {
+	      var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(namedId, fromNamedId) {
 	        return _regenerator2.default.wrap(function _callee3$(_context3) {
 	          while (1) {
 	            switch (_context3.prev = _context3.next) {
@@ -263,7 +265,7 @@ var namedKernelManager =
 	        }, _callee3, this);
 	      }));
 	
-	      function closeNamed(_x4) {
+	      function closeNamed(_x5, _x6) {
 	        return _ref3.apply(this, arguments);
 	      }
 	
@@ -273,18 +275,19 @@ var namedKernelManager =
 	    /**
 	     * change named (emits change event)
 	     * @param {string} namedId named id
+	     * @param {string} fromNamedId from named id
 	     * @return {void}
 	     */
 	
 	  }, {
 	    key: 'changeNamed',
 	    value: function () {
-	      var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(oldNamedId, newNamedId) {
+	      var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(namedId, fromNamedId) {
 	        return _regenerator2.default.wrap(function _callee4$(_context4) {
 	          while (1) {
 	            switch (_context4.prev = _context4.next) {
 	              case 0:
-	                this.emit('change_named', oldNamedId, newNamedId);
+	                this.emit('change_named', namedId, fromNamedId);
 	
 	              case 1:
 	              case 'end':
@@ -294,7 +297,7 @@ var namedKernelManager =
 	        }, _callee4, this);
 	      }));
 	
-	      function changeNamed(_x5, _x6) {
+	      function changeNamed(_x7, _x8) {
 	        return _ref4.apply(this, arguments);
 	      }
 	
@@ -507,7 +510,7 @@ var namedKernelManager =
 	        }, _callee7, this);
 	      }));
 	
-	      function installNamed(_x7, _x8) {
+	      function installNamed(_x9, _x10) {
 	        return _ref7.apply(this, arguments);
 	      }
 	
